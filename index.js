@@ -1,7 +1,8 @@
-var app = require('./server/server.js');
+'use strict'
+const app = require('./server/server.js');
 
-var port = process.env.PORT || 8000;
+const port = process.env.PORT || 3000;
 
-app.listen(port, function() {
+app.listen(port, () => {
   console.log('http://localhost:' + port);
 })

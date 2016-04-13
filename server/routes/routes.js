@@ -1,7 +1,10 @@
-var jsonParser = require('body-parser').json();
+'use strict'
+const jsonParser = require('body-parser').json();
+const userController = require('../controllers/userController.js');
 
-var userController = require('../controllers/userController.js');
-
-module.exports = function(app, express) {
+module.exports = (app, express) => {
   app.use(jsonParser);
+
+  app.post('/activity')
+  app.get('/stats')
 }
