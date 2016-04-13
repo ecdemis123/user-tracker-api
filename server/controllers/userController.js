@@ -6,9 +6,9 @@ const moment = require('moment');
 module.exports = {
   logActivity: (req, res) => {
     let newActivity = {
-      userID: req.body.user_id,
-      sessionID: req.body.session_id,
-      datetime: moment.format("YYYY-MM-DD")
+      user_id: req.body.user_id,
+      session_id: req.body.session_id,
+      date: moment().format("YYYY-MM-DD")
     }
 
     //insert into db
