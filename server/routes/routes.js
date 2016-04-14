@@ -7,5 +7,5 @@ module.exports = (app, express) => {
   app.use(jsonParser);
 
   app.post('/activity', jsonParser, userController.logActivity);
-  app.get('/stats', jsonParser, statController.retrieveStatistics);
+  app.get('/stats', statController.retrieveStatistics);
 }

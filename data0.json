@@ -20,6 +20,26 @@
       "user_id": 3,
       "session_id": 4,
       "date": "2016-04-16"
+    },
+    {
+      "user_id": 1,
+      "session_id": 1,
+      "date": "2016-04-13"
+    },
+    {
+      "user_id": 2,
+      "session_id": 2,
+      "date": "2016-04-14"
+    },
+    {
+      "user_id": 2,
+      "session_id": 1,
+      "date": "2016-04-15"
+    },
+    {
+      "user_id": 3,
+      "session_id": 4,
+      "date": "2016-04-16"
     }
   ]
 }

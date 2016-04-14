@@ -1,23 +1,30 @@
 'use strict'
 const statsLib = require('../lib/statistics');
-const fileLib = require('../lib/readingFiles.js');
+const fileLib = require('../lib/crud.js');
 
 module.exports = {
   retrieveStatistics: (req, res) => {
-    console.log("inside retrieve stats");
-    console.log("this is the request query: ", req.query);
+
+    if(!req.query.start_date || !req.query.end_date || !req.query.user_id) {
+      res.status(400).send({"error": "missing_params"});
+    }
 
     let startDate = req.query.start_date;
     let endDate = req.query.end_date;
     let user_id = req.query.user_id;
-    //get stats from db
-    //call lib function for statistics
-    fileLib.readJSONPromise()
+
+    fileLib.read()
     .then(data => {
-      console.log("data from json promise after then", data);
       let stats = statsLib.calcUserStats(data, startDate, endDate, user_id);
-      console.log('statistics from json promise: ', stats);
       res.json(stats);
     })
+    .catch(error);
+    var success = (data)=> {
+      return res.json(data);
+    }
+    var error = (error) => {
+      console.error(error);
+      return res.status(400).send();
+    }
   }
 }
