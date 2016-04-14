@@ -3,28 +3,19 @@
 const fs = require('fs');
 
 module.exports = {
-  readFilePromise: () => {
+
+  readJSONPromise: () => {
+    console.log("inside read json promise");
     return new Promise((resolve, reject) => {
-      fs.readFile('../../data.json', 'utf8', (err, res) => {
+      fs.readFile(__dirname + '/data.json', 'utf8', (err, data) => {
+        console.log("this is the data inside fs.readfile", data, "++++")
         if(err) {
           reject(err);
         } else {
-          resolve(res);
-        }
-      })
-    })
-  },
-
-  readJSONPromise: () => {
-    return new Promise((resolve, reject) => {
-      readFilePromise()
-      .then(res => {
-        try {
-          resolve(JSON.parse(res));
-        } catch(ex) {
-          reject(ex);
+          resolve(JSON.parse(data));
         }
       })
     })
   }
+
 }

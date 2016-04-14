@@ -1,45 +1,66 @@
 'use strict'
 const moment = require('moment');
 
+const activityFilter = (activity, start, end) => {
+  console.log("inside activity filter")
+  let filteredActivity = [];
+  console.log("activity length inside filter", activity.length);
+  for(var i = 0; i < activity.length; i++) {
+    let currentActivityDate = moment(activity[i].date, "YYYY-MM-DD").unix();
+    if(currentActivityDate <= end && currentActivityDate >= start) {
+      //push into filtered activity array
+      console.log("inside if statement")
+      filteredActivity.push(activity[i]);
+      console.log("filteredActivity", filteredActivity);
+    }
+  }
+  let sessionsObj = {};
+  let usersObj = {};
+  for(let j = 0; j < filteredActivity.length; j++) {
+    let currentSession = filteredActivity[j].session_id;
+    let currentUser = filteredActivity[j].user_id;
+
+    if(!sessionsObj[currentSession]) {
+      sessionsObj[currentSession] = true;
+    }
+    if(!usersObj[currentUser]) {
+      usersObj[currentUser] = true;
+    }
+  }
+
+  let numberOfSessions = Object.keys(sessionsObj).length;
+  let numberOfUsers = Object.keys(usersObj).length;
+  return {
+    num_sessions: numberOfSessions,
+    unique_users: numberOfUsers,
+    avg_sessions_per_user: (numberOfSessions/numberOfUsers).toFixed(2)
+  }
+}
+
 module.exports = {
-  calcUserStats: (data, startDate, endDate) => {
+  calcUserStats: (data, startDate, endDate, user_id) => {
+    console.log("inside calc user stats");
+    console.log("end date, ", endDate);
+    let unixEndDate = moment(endDate, "YYYY-MM-DD").unix();
+    console.log("unix end date", unixEndDate);
 
     let unixStartDate = moment(startDate, "YYYY-MM-DD").unix();
-    let unixEndDate = moment(endDate, "YYYY-MM-DD").unix();
-    let activity = data.activity;
-    let filteredActivity = [];
+    console.log("unix start date", unixStartDate);
 
-    for(let i = 0; i < activity.length; i++) {
-      //iterate over user activity
-      let currentActivityDate = moment(activity[i].date, "YYYY-MM-DD").unix();
-      //check if date is within date range, inclusive
-      if(currentActivityDate <= unixEndDate && currentActivityDate >= unixStartDate) {
-        //push into filtered activity array
-        filteredActivity.push(activity[i]);
+    let allUserActivity = data.activity;
+    console.log("data.activity", data.activity);
+    let individualUserActivity = [];
+    if(user_id) {
+      for(var k = 0; k < allUserActivity.length; k++) {
+        if(allUserActivity[k].user_id == user_id) {
+          individualUserActivity.push(allUserActivity[k]);
+        }
       }
-    }
-    let sessionsObj = {};
-    let usersObj = {};
-    for(let j = 0; j < filteredActivity.length; j++) {
-      let currentSession = filteredActivity[j].session_id;
-      let currentUser = filteredActivity[j].user_id;
-
-      if(!sessionsObj[currentSession]) {
-        sessionsObj[currentSession] = true;
-      }
-      if(!usersObj[currentUser]) {
-        usersObj[currentUser] = true;
-      }
-    }
-
-    let numberOfSessions = Object.keys(sessionsObj).length;
-    let numberOfUsers = Object.keys(usersObj).length;
-    let averageSessionsPerUser = numberOfSessions/numberOfUsers;
-
-    return {
-      num_sessions: numberOfSessions,
-      unique_users: numberOfUsers,
-      avg_sessions_per_user: averageSessionsPerUser
+      console.log('individual User activity', individualUserActivity);
+      return activityFilter(individualUserActivity, unixStartDate, unixEndDate);
+    } else {
+      console.log("inside else case")
+      return activityFilter(allUserActivity, unixStartDate, unixEndDate);
     }
 
   }
