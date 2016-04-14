@@ -5,7 +5,7 @@ const fileLib = require('../lib/crud.js');
 module.exports = {
   retrieveStatistics: (req, res) => {
 
-    if(!req.query.start_date || !req.query.end_date || !req.query.user_id) {
+    if(!req.query.start_date || !req.query.end_date) {
       res.status(400).send({"error": "missing_params"});
     }
 

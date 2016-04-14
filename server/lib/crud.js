@@ -16,9 +16,9 @@ module.exports = {
     })
   },
 
-  create: (data) => {
+  create: data => {
     return new Promise((resolve, reject) => {
-      fs.writeFile(__dirname + '/../../data.json', JSON.stringify(data), 'utf8', (err) => {
+      fs.writeFile(__dirname + '/../../data.json', JSON.stringify(data), 'utf8', err => {
         if(err) {
           reject(err);
         } else {

@@ -1,5 +1,25 @@
 'use strict'
 const moment = require('moment');
+module.exports = {
+  calcUserStats: (data, startDate, endDate, user_id) => {
+    let unixEndDate = moment(endDate, "YYYY-MM-DD").unix();
+    let unixStartDate = moment(startDate, "YYYY-MM-DD").unix();
+
+    let allUserActivity = data.activity;
+    let individualUserActivity = [];
+    if(user_id) {
+      for(let k = 0; k < allUserActivity.length; k++) {
+        if(allUserActivity[k].user_id == user_id) {
+          individualUserActivity.push(allUserActivity[k]);
+        }
+      }
+      return activityFilter(individualUserActivity, unixStartDate, unixEndDate);
+    } else {
+      return activityFilter(allUserActivity, unixStartDate, unixEndDate);
+    }
+
+  }
+}
 
 const activityFilter = (activity, start, end) => {
   let filteredActivity = [];
@@ -23,26 +43,5 @@ const activityFilter = (activity, start, end) => {
     num_sessions: numberOfSessions,
     unique_users: numberOfUsers,
     avg_sessions_per_user: Number((numberOfSessions/numberOfUsers).toFixed(2))
-  }
-}
-
-module.exports = {
-  calcUserStats: (data, startDate, endDate, user_id) => {
-    let unixEndDate = moment(endDate, "YYYY-MM-DD").unix();
-    let unixStartDate = moment(startDate, "YYYY-MM-DD").unix();
-
-    let allUserActivity = data.activity;
-    let individualUserActivity = [];
-    if(user_id) {
-      for(let k = 0; k < allUserActivity.length; k++) {
-        if(allUserActivity[k].user_id == user_id) {
-          individualUserActivity.push(allUserActivity[k]);
-        }
-      }
-      return activityFilter(individualUserActivity, unixStartDate, unixEndDate);
-    } else {
-      return activityFilter(allUserActivity, unixStartDate, unixEndDate);
-    }
-
   }
 }
